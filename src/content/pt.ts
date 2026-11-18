@@ -12,25 +12,6 @@ export const pt: Dict = {
   },
   nav: {
     skip: "Pular para o conteúdo",
-    menu: "Menu",
-    work: "Projetos",
-    workGroups: [
-      {
-        label: "Produtos que construí",
-        items: [
-          { href: "#agentoffice", name: "AgentOffice", line: "Agentes de IA com aprovação humana" },
-          { href: "#crn", name: "CRN", line: "ERP de varejo, lojistas pagantes" },
-        ],
-      },
-      {
-        label: "Código aberto",
-        items: [
-          { href: "#emporio", name: "Emporio Agent", line: "Agente em Python, 133 testes" },
-          { href: "#crm", name: "Mini CRM SDR", line: "CRM multi-workspace com IA" },
-        ],
-      },
-    ],
-    card: { title: "AgentOffice", line: "O escritório onde cada agente mostra seu status" },
     items: [
       { href: "#experience", label: "Experiência" },
       { href: "#skills", label: "Habilidades" },
@@ -45,14 +26,6 @@ export const pt: Dict = {
     ctaEmail: "Mandar e-mail",
     ctaWork: "Ver o AgentOffice",
     proof: "Lucas do Rio Verde, MT · UTC-4, no horário da costa leste dos EUA no verão de lá · Remoto, como contractor ou via EOR",
-    windowTitle: "AgentOffice · escritório",
-    artLabel:
-      "Tela real do escritório do AgentOffice: mesas em pixel art onde os agentes de IA trabalham, com balões de status como “Lendo o Notion” e “Precisa de você”, e um rascunho esperando aprovação.",
-    note: {
-      title: "Post no LinkedIn",
-      chip: "Aprovado",
-      steps: ["Rascunho escrito por um agente", "Esperando a sua aprovação", "Você aprovou, então ele sai"],
-    },
   },
   agentoffice: {
     title: "AgentOffice, uma plataforma de agentes de IA que projetei e construí.",
@@ -69,34 +42,6 @@ export const pt: Dict = {
       { k: "Testes", v: "Cerca de 230 arquivos de teste no Vitest; E2E com Playwright para agentes, cobrança e onboarding" },
       { k: "Operação", v: "Prometheus, Grafana e Sentry" },
     ],
-    cardProduct: {
-      title: "Fontes do AgentOffice e fila de aprovação",
-      line: "Os agentes leem Notion, Drive e arquivos; todo rascunho espera uma pessoa.",
-    },
-    cardSystem: {
-      title: "Pipeline de tarefas do AgentOffice",
-      line: "Workers pegam cada tarefa; o Socket.IO devolve o estado do agente.",
-    },
-    diagramProduct: {
-      alt: "Notion, Google Drive e arquivos enviados alimentam os agentes, que pesquisam, analisam e escrevem um rascunho para o LinkedIn que espera aprovação.",
-      sources: ["Notion", "Google Drive", "Seus arquivos"],
-      core: "Agentes",
-      targets: [
-        { label: "Pesquisa", sub: "Das suas fontes" },
-        { label: "Análise", sub: "Das suas fontes" },
-        { label: "Rascunho LinkedIn", sub: "Espera você" },
-      ],
-    },
-    diagramSystem: {
-      alt: "Uma tarefa da interface Next.js vai para os workers BullMQ sobre Redis, que rodam o LangGraph com OpenAI e Anthropic, indexam e buscam com pgvector e transmitem o estado do agente por Socket.IO.",
-      input: { label: "Tarefa", sub: "Interface Next.js" },
-      core: "Workers BullMQ",
-      lanes: [
-        { label: "Execução LangGraph", sub: "OpenAI · Anthropic" },
-        { label: "Índice RAG", sub: "pgvector" },
-        { label: "Estado do agente", sub: "Socket.IO" },
-      ],
-    },
   },
   guarantees: {
     title: "O que o AgentOffice garante, e o que ainda não faz.",
@@ -109,7 +54,6 @@ export const pt: Dict = {
     ],
     notYetTitle: "Ainda não faz, como o site do produto informa",
     notYet: "Workspaces com vários usuários, escrever de volta no Notion ou no Drive e modelos Gemini.",
-    shotAlt: "O escritório inteiro do AgentOffice: seis agentes nas mesas, quatro com balões de status, um marcado “Precisa de você”.",
   },
   crn: {
     title: "CRN, um ERP de varejo que construí sozinho.",
@@ -185,6 +129,63 @@ export const pt: Dict = {
     repo: "https://github.com/GabrielMMoura/mini-crm-sdr-ai",
     demo: "https://mini-crm-sdr-ai-vercel.vercel.app",
   },
+  world: {
+    eyebrow: "Engenheiro full stack · Remoto do Brasil",
+    floors: {
+      street: "Rua",
+      agentoffice: "3º · AgentOffice",
+      crn: "2º · CRN",
+      elevator: "Elevador",
+      emporio: "1º · Emporio Agent",
+      crm: "M · Mini CRM",
+      lobby: "Portaria",
+    },
+    coffee: {
+      counter: "Xícaras de café encontradas",
+      mug: "Xícara de café escondida",
+      hint: "Dez xícaras de café estão escondidas no prédio. Clique numa para pegar.",
+      found: "Xícara encontrada",
+      done: "As dez. É um dia normal de trabalho para mim.",
+      doneCta: "Me mande um e-mail",
+    },
+    gabriel: {
+      label: "Falar com o Gabriel em pixel",
+      lines: [
+        "Oi, eu sou o Gabriel. Construo o produto inteiro: interface, API, workers e cobrança.",
+        "Trabalho de Lucas do Rio Verde, no UTC-4.",
+        "Aqui todo rascunho de agente espera uma pessoa antes de sair.",
+        "Tem dez xícaras de café escondidas neste prédio.",
+      ],
+    },
+    alt: {
+      facade:
+        "Rua à noite em pixel art. Um prédio de tijolo acende as janelas uma a uma, um letreiro no telhado diz Gabriel Moura e o Gabriel em pixel caminha até a porta.",
+      office:
+        "Andar de escritório em pixel art: três agentes de IA trabalham nas mesas com balões de status, uma tarefa corre por um tubo e o Gabriel em pixel carimba um rascunho antes de ele sair pela janela.",
+      store:
+        "Loja em pixel art: um cliente paga com PIX no balcão, o caixa imprime a nota fiscal e uma lâmpada mostra a ligação com a SEFAZ.",
+      elevator: "Elevador em pixel art cujas portas abrem e mostram o Gabriel em pixel entre os andares.",
+      emporio:
+        "Bancada em pixel art: um notebook roda os testes, um quadro mostra ruff e pytest passando e um celular mostra o chat de atendimento.",
+      crm: "Quadro branco em pixel art com um pipeline Kanban; um post-it passa para a próxima coluna e ganha uma mensagem escrita pela IA.",
+      lobby:
+        "Portaria à noite em pixel art: um balcão com o Gabriel em pixel e três portas marcadas E-mail, LinkedIn e GitHub.",
+    },
+    agents: [
+      ["Lendo o Notion", "Escrevendo o post do LinkedIn"],
+      ["Buscando no Drive", "Mapear 20 contas"],
+      ["Precisa de você", "Rascunho pronto"],
+    ],
+    approved: "Aprovado",
+    screenLabel: "Abrir useagentoffice.com, o escritório real do AgentOffice",
+    nfe: "NF-e",
+    sefaz: "SEFAZ",
+    ci: ["ruff", "pytest · 133"],
+    directory: "Quadro de salas",
+    doors: { email: "E-mail", linkedin: "LinkedIn", github: "GitHub" },
+    copy: "Copiar e-mail",
+    copied: "Copiado",
+  },
   repoLabel: "Código no GitHub",
   demoLabel: "Demo no ar",
   experience: {
@@ -231,15 +232,11 @@ export const pt: Dict = {
   contact: {
     title: "Fale comigo sobre uma vaga full stack",
     lead: "Remoto, como contractor ou via EOR, ou com mudança. Sem visto de trabalho nos EUA.",
-    word: "Gabriel Moura",
     lede: "Engenheiro full stack: SaaS, integrações com IA e apps em tempo real.",
     email: "gabrielmouramendes@hotmail.com",
     emailLabel: "E-mail",
     linkedin: "https://www.linkedin.com/in/gabrielmouram",
     github: "https://github.com/GabrielMMoura",
-    colWork: "Projetos",
-    colAbout: "Sobre",
-    colContact: "Contato",
     source: "Código deste site",
     trademarks: "Nomes e logotipos de produtos são marcas de seus donos.",
   },

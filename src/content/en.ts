@@ -12,25 +12,6 @@ export const en = {
   },
   nav: {
     skip: "Skip to content",
-    menu: "Menu",
-    work: "Work",
-    workGroups: [
-      {
-        label: "Products I built",
-        items: [
-          { href: "#agentoffice", name: "AgentOffice", line: "AI agents with human approval" },
-          { href: "#crn", name: "CRN", line: "Retail ERP, paying merchants" },
-        ],
-      },
-      {
-        label: "Public code",
-        items: [
-          { href: "#emporio", name: "Emporio Agent", line: "Python agent, 133 tests" },
-          { href: "#crm", name: "Mini CRM SDR", line: "Multi-workspace CRM with AI" },
-        ],
-      },
-    ],
-    card: { title: "AgentOffice", line: "The office where each agent shows its status" },
     items: [
       { href: "#experience", label: "Experience" },
       { href: "#skills", label: "Skills" },
@@ -45,14 +26,6 @@ export const en = {
     ctaEmail: "Email me",
     ctaWork: "See AgentOffice",
     proof: "Lucas do Rio Verde, Brazil · UTC-4, on US Eastern hours in summer · Remote, as a contractor or through an EOR",
-    windowTitle: "AgentOffice · office",
-    artLabel:
-      "AgentOffice's real office screen: pixel-art desks where AI agents work, with status bubbles such as “Lendo o Notion” and “Precisa de você”, and a draft waiting for approval.",
-    note: {
-      title: "LinkedIn post",
-      chip: "Approved",
-      steps: ["Draft written by an agent", "Waiting for your approval", "You approved it, so it goes out"],
-    },
   },
   agentoffice: {
     title: "AgentOffice, an AI agent platform I designed and built.",
@@ -69,34 +42,6 @@ export const en = {
       { k: "Tests", v: "~230 Vitest test files; Playwright E2E for agents, billing and onboarding" },
       { k: "Operations", v: "Prometheus, Grafana and Sentry" },
     ],
-    cardProduct: {
-      title: "AgentOffice sources and the approval queue",
-      line: "Agents read Notion, Drive and uploads; every draft waits for a person.",
-    },
-    cardSystem: {
-      title: "AgentOffice task pipeline",
-      line: "Workers take each task; Socket.IO streams the agent state back.",
-    },
-    diagramProduct: {
-      alt: "Notion, Google Drive and uploaded files feed the agents, which research, analyze and write a LinkedIn draft that waits for approval.",
-      sources: ["Notion", "Google Drive", "Your files"],
-      core: "Agents",
-      targets: [
-        { label: "Research", sub: "From your sources" },
-        { label: "Analysis", sub: "From your sources" },
-        { label: "LinkedIn draft", sub: "Waits for you" },
-      ],
-    },
-    diagramSystem: {
-      alt: "A task from the Next.js UI goes to BullMQ workers on Redis, which run LangGraph with OpenAI and Anthropic, index and retrieve with pgvector, and stream agent state over Socket.IO.",
-      input: { label: "Task", sub: "Next.js UI" },
-      core: "BullMQ workers",
-      lanes: [
-        { label: "LangGraph run", sub: "OpenAI · Anthropic" },
-        { label: "RAG index", sub: "pgvector" },
-        { label: "Agent state", sub: "Socket.IO" },
-      ],
-    },
   },
   guarantees: {
     title: "What AgentOffice guarantees, and what it does not do yet.",
@@ -109,7 +54,6 @@ export const en = {
     ],
     notYetTitle: "Not built yet, as the product site states",
     notYet: "Multi-user workspaces, writing back to Notion or Drive, and Gemini models.",
-    shotAlt: "AgentOffice's whole office: six agents at their desks, four with status bubbles, one marked “Precisa de você” (needs you).",
   },
   crn: {
     title: "CRN, a retail ERP I built solo.",
@@ -185,6 +129,63 @@ export const en = {
     repo: "https://github.com/GabrielMMoura/mini-crm-sdr-ai",
     demo: "https://mini-crm-sdr-ai-vercel.vercel.app",
   },
+  world: {
+    eyebrow: "Full stack engineer · Remote from Brazil",
+    floors: {
+      street: "Street",
+      agentoffice: "3F · AgentOffice",
+      crn: "2F · CRN",
+      elevator: "Elevator",
+      emporio: "1F · Emporio Agent",
+      crm: "M · Mini CRM",
+      lobby: "Lobby",
+    },
+    coffee: {
+      counter: "Coffee cups found",
+      mug: "Hidden coffee cup",
+      hint: "Ten coffee cups are hidden in this building. Click one to pick it up.",
+      found: "Coffee cup found",
+      done: "All ten. That is a normal workday for me.",
+      doneCta: "Email me",
+    },
+    gabriel: {
+      label: "Talk to pixel Gabriel",
+      lines: [
+        "Hi, I'm Gabriel. I build the whole product: UI, API, workers and billing.",
+        "I work from Lucas do Rio Verde, Brazil, on UTC-4.",
+        "Every agent draft here waits for a person before it goes out.",
+        "Ten coffee cups are hidden in this building.",
+      ],
+    },
+    alt: {
+      facade:
+        "Pixel-art night street. A brick office building turns its windows on one by one, a lit sign on the roof reads Gabriel Moura, and a pixel Gabriel walks to the door.",
+      office:
+        "Pixel-art office floor: three AI agents work at desks with status bubbles, a task ticket travels along a pipe, and pixel Gabriel stamps a draft before it leaves through the window.",
+      store:
+        "Pixel-art shop floor: a customer pays by PIX at the counter, the point of sale prints a tax invoice, and a lamp shows the link to SEFAZ.",
+      elevator: "Pixel-art elevator whose doors open on pixel Gabriel riding between floors.",
+      emporio:
+        "Pixel-art workbench: a laptop runs the test suite, a board shows ruff and pytest passing, and a phone shows the support chat.",
+      crm: "Pixel-art whiteboard with a Kanban pipeline; a sticky note moves to the next column and gets an AI-written message.",
+      lobby:
+        "Pixel-art lobby at night: a reception desk with pixel Gabriel and three doors marked Email, LinkedIn and GitHub.",
+    },
+    agents: [
+      ["Reading Notion", "Writing the LinkedIn draft"],
+      ["Searching Drive", "Mapping 20 accounts"],
+      ["Needs you", "Draft ready"],
+    ],
+    approved: "Approved",
+    screenLabel: "Open useagentoffice.com, the real AgentOffice office",
+    nfe: "NF-e",
+    sefaz: "SEFAZ",
+    ci: ["ruff", "pytest · 133"],
+    directory: "Directory",
+    doors: { email: "Email", linkedin: "LinkedIn", github: "GitHub" },
+    copy: "Copy email",
+    copied: "Copied",
+  },
   repoLabel: "Code on GitHub",
   demoLabel: "Live demo",
   experience: {
@@ -231,15 +232,11 @@ export const en = {
   contact: {
     title: "Email me about a full stack role",
     lead: "Remote, as a contractor or through an EOR, or relocation. No US work visa.",
-    word: "Gabriel Moura",
     lede: "Full stack engineer: SaaS, AI integrations and real-time apps.",
     email: "gabrielmouramendes@hotmail.com",
     emailLabel: "Email",
     linkedin: "https://www.linkedin.com/in/gabrielmouram",
     github: "https://github.com/GabrielMMoura",
-    colWork: "Work",
-    colAbout: "About",
-    colContact: "Contact",
     source: "Source of this site",
     trademarks: "Product names and logos are trademarks of their owners.",
   },

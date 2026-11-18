@@ -30,4 +30,4 @@ export function buildMetadata(t: Dict, path: "/" | "/pt"): Metadata {
   };
 }
 
-export const viewport: Viewport = { themeColor: "#dfdedb", colorScheme: "light" };
+export const viewport: Viewport = { themeColor: "#10222b", colorScheme: "light" };

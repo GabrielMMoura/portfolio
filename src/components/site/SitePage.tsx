@@ -2,16 +2,9 @@ import type { Dict } from "@/content/en";
 import { REPO_URL } from "@/lib/site";
 import ICONS from "@/content/icons.json";
 
-/* Markup follows the taste-skill kit (public/assets): its classes, its section box, its scripts.
-   Plan, at 1440x900: hero 1 · agentoffice 2 (g2) · guarantees 1 · crn 1 (line-carries-colour) ·
-   statement 1 (letters-assemble) · emporio 1 · crm 1 · experience 1 · skills 1 · closing 1. */
-
-const Arrow = () => (
-  <svg className="m-arrow" viewBox="0 0 12 12" aria-hidden="true">
-    <path className="m-arrow__stem" d="M1 6h8" />
-    <path className="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5" />
-  </svg>
-);
+/* The building (DESIGN.md, 18/11/2026). Every word is HTML from the content files; the pixel
+   scenes are canvases drawn by public/world.js, and the overlays (bubbles, coffee cups, doors)
+   sit on them through data-anchor names the scene defines. */
 
 /** `code` spans written with backticks in the content files. */
 function Rich({ text }: { text: string }) {
@@ -30,14 +23,6 @@ function Rich({ text }: { text: string }) {
   );
 }
 
-function Diagram({ spec }: { spec: object }) {
-  return (
-    <div className="dg" data-diagram="">
-      <script type="application/json" dangerouslySetInnerHTML={{ __html: JSON.stringify(spec) }} />
-    </div>
-  );
-}
-
 function Ext({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) {
   return (
     <a className={className ?? "link"} href={href} target="_blank" rel="noopener noreferrer">
@@ -46,534 +31,454 @@ function Ext({ href, children, className }: { href: string; children: React.Reac
   );
 }
 
+/** An 8x8 pixel coffee cup, the collectible. */
+function Cup() {
+  return (
+    <svg viewBox="0 0 10 10" shapeRendering="crispEdges" aria-hidden="true">
+      <path fill="#fffaf0" d="M1 3h6v5H1z" />
+      <path fill="#6b3f22" d="M2 3h4v1H2z" />
+      <path fill="#fffaf0" d="M7 4h2v3H7zM8 5h-1v1h1z" />
+      <path fill="#b9784a" d="M8 5h-1v1h1z" />
+      <path fill="#221a15" d="M1 8h6v1H1zM0 3h1v5H0zM7 3h1v1H7zM9 4h1v3H9zM7 7h2v1H7z" />
+      <path fill="#e9dcc2" d="M2 0h1v2H2zM4 1h1v1H4z" />
+    </svg>
+  );
+}
+
+function Mug({ id, anchor, label }: { id: number; anchor: string; label: string }) {
+  return (
+    <button className="mug" type="button" data-mug={id} data-anchor={anchor} aria-label={label} hidden>
+      <Cup />
+    </button>
+  );
+}
+
+function Plate({ num, name }: { num: string; name: string }) {
+  return (
+    <div className="slab" aria-hidden="true">
+      <span className="plate">
+        <b>{num}</b>
+        {name}
+      </span>
+    </div>
+  );
+}
+
 export function SitePage({ t }: { t: Dict }) {
   const mail = `mailto:${t.contact.email}`;
   const other = t.lang === "en" ? "pt-BR" : "en";
+  const w = t.world;
   const ao = t.agentoffice;
-
-  const productSpec = {
-    layout: "bowtie",
-    alt: ao.diagramProduct.alt,
-    sources: [
-      { label: ao.diagramProduct.sources[0], icon: "notion" },
-      { label: ao.diagramProduct.sources[1], icon: "google-drive" },
-      { label: ao.diagramProduct.sources[2], icon: "ui:file-text" },
-    ],
-    core: { label: ao.diagramProduct.core, icon: "ui:bot" },
-    targets: [
-      { label: ao.diagramProduct.targets[0].label, icon: "ui:search", sub: ao.diagramProduct.targets[0].sub },
-      { label: ao.diagramProduct.targets[1].label, icon: "ui:bar-chart-3", sub: ao.diagramProduct.targets[1].sub },
-      { label: ao.diagramProduct.targets[2].label, icon: "linkedin", sub: ao.diagramProduct.targets[2].sub },
-    ],
-  };
-  const systemSpec = {
-    layout: "lanes",
-    alt: ao.diagramSystem.alt,
-    input: { label: ao.diagramSystem.input.label, icon: "ui:list-todo", sub: ao.diagramSystem.input.sub },
-    core: { label: ao.diagramSystem.core, icon: "redis" },
-    lanes: [
-      { label: ao.diagramSystem.lanes[0].label, icon: "langchain", sub: ao.diagramSystem.lanes[0].sub, done: true },
-      { label: ao.diagramSystem.lanes[1].label, icon: "postgres", sub: ao.diagramSystem.lanes[1].sub, done: true },
-      { label: ao.diagramSystem.lanes[2].label, icon: "logos:socket.io", sub: ao.diagramSystem.lanes[2].sub, done: true },
-    ],
+  const floor = (k: keyof typeof w.floors) => w.floors[k];
+  const split = (s: string) => {
+    const i = s.indexOf(" · ");
+    return i < 0 ? { num: "", name: s } : { num: s.slice(0, i), name: s.slice(i + 3) };
   };
 
   return (
     <>
-      <header className="nav">
-        <div className="wrap nav__bar">
-          <a className="skip-link" href="#top">
-            {t.nav.skip}
+      <a className="skip" href="#main">
+        {t.nav.skip}
+      </a>
+      <header className="top">
+        <a className="brand" href="#top">
+          <span className="brand__mark" aria-hidden="true" />
+          Gabriel Moura
+        </a>
+        <nav className="top__nav" aria-label="Main">
+          <a href="#agentoffice">AgentOffice</a>
+          <a href="#crn">CRN</a>
+          <a href="#emporio">{t.lang === "en" ? "Code" : "Código"}</a>
+          <a href="#experience">{t.nav.items[0].label}</a>
+          <a href={t.nav.switchHref} hrefLang={other} lang={other} className="top__lang">
+            {t.nav.switchShort}
+            <span className="sr-only"> · {t.nav.switchLabel}</span>
           </a>
-          <a className="nav__logo" href="#top">
-            <span className="mark" data-mark="dots" aria-hidden="true" />
-            Gabriel Moura
-          </a>
-          <nav className="nav__links" aria-label={t.nav.work}>
-            <div className="nav__item">
-              <a className="nav__link" href="#agentoffice">
-                {t.nav.work}{" "}
-                <svg className="chev" viewBox="0 0 12 12" aria-hidden="true">
-                  <path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </a>
-              <div className="nav__menu">
-                <div className="wrap grid">
-                  {t.nav.workGroups.map((g) => (
-                    <div className="menu-col span-3" key={g.label}>
-                      <p className="t-label">{g.label}</p>
-                      {g.items.map((it) => (
-                        <a href={it.href} key={it.href}>
-                          {it.name}
-                          <span>{it.line}</span>
-                        </a>
-                      ))}
-                    </div>
-                  ))}
-                  <a className="menu-card span-3 start-10" href="#guarantees">
-                    <div className="panel">
-                      <img className="frame__img" src="/img/ao-desks-research.webp" alt="" width={1060} height={330} loading="lazy" />
-                    </div>
-                    <span className="t-card">{t.nav.card.title}</span>
-                    <span className="t-small muted">{t.nav.card.line}</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-            {t.nav.items.map((it) => (
-              <div className="nav__item" key={it.href}>
-                <a className="nav__link" href={it.href}>
-                  {it.label}
-                </a>
-              </div>
-            ))}
-            <div className="nav__item">
-              <a className="nav__link" href={t.nav.switchHref} hrefLang={other} lang={other}>
-                {t.nav.switchLabel}
-              </a>
-            </div>
-          </nav>
-          <div className="nav__actions">
-            <a className="btn btn--primary" href={mail}>
-              {t.hero.ctaEmail}
-            </a>
-          </div>
-          <button className="nav__toggle" type="button" aria-expanded="false" aria-label={t.nav.menu}>
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
-              <path d="M2 5h14M2 13h14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
-          </button>
-        </div>
+        </nav>
+        <a className="btn btn--amber btn--sm" href={mail}>
+          {t.hero.ctaEmail}
+        </a>
       </header>
 
-      <main id="top">
-        <section className="hero hero--collage" data-enter="" aria-labelledby="hero-h">
-          <div className="wrap">
-            <div className="hero-text grid hero__grid">
-              <div className="hero__text span-5">
-                <h1 id="hero-h">{t.hero.title}</h1>
-                <p className="hero__lead">{t.hero.lead}</p>
-                <div className="btn-row">
-                  <a className="btn btn--primary" href={mail}>
-                    {t.hero.ctaEmail}
-                    <Arrow />
-                  </a>
-                  <a className="btn btn--secondary" href="#agentoffice">
-                    {t.hero.ctaWork}
-                  </a>
-                </div>
-                <p className="hero__proof">{t.hero.proof}</p>
-              </div>
-              <div className="hero__art span-6 start-7" data-fx="silk-folds" data-fx-seed="7" role="img" aria-label={t.hero.artLabel}>
-                <div className="ly-piece ly-piece--main d-win" aria-hidden="true">
-                  <div className="d-win__bar">
-                    <span className="d-win__dots">
-                      <i />
-                      <i />
-                      <i />
-                    </span>
-                    <span>{t.hero.windowTitle}</span>
-                  </div>
-                  <img className="d-win__img" src="/img/ao-window.webp" alt="" width={1060} height={672} fetchPriority="high" />
-                </div>
-                <div className="ly-piece ly-piece--note d-card" aria-hidden="true" data-ly-steps="700">
-                  <div className="d-card__row">
-                    <span className="d-card__title">{t.hero.note.title}</span>
-                    <span className="d-chip" data-step="" data-step-at="3">
-                      {t.hero.note.chip}
-                    </span>
-                  </div>
-                  {t.hero.note.steps.map((s, i) => (
-                    <div className="d-note__line" data-step="" key={s}>
-                      <i className={i === 1 ? "warn" : undefined}>{i === 1 ? "!" : "✓"}</i>
-                      <span>{s}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+      <main id="main">
+        {/* Street: the building at night */}
+        <section className="hero" id="top" data-floor={floor("street")} aria-labelledby="hero-h">
+          <div className="hero__scene stage" data-scene="facade">
+            <canvas className="layer" data-layer="back" aria-hidden="true" />
+            <p className="sign" data-anchor-box="sign" aria-hidden="true">
+              {"GABRIEL MOURA".split("").map((c, i) => (
+                <span key={i} style={{ "--i": i } as React.CSSProperties}>
+                  {c === " " ? " " : c}
+                </span>
+              ))}
+            </p>
+            <canvas className="layer" data-layer="front" role="img" aria-label={w.alt.facade} />
+            <Mug id={1} anchor="mug-bench" label={w.coffee.mug} />
+            <Mug id={2} anchor="mug-awning" label={w.coffee.mug} />
+          </div>
+          <div className="hero__text">
+            <p className="eyebrow">{w.eyebrow}</p>
+            <h1 id="hero-h">{t.hero.title}</h1>
+            <p className="hero__lead">{t.hero.lead}</p>
+            <div className="btn-row">
+              <a className="btn btn--amber" href={mail}>
+                {t.hero.ctaEmail}
+              </a>
+              <a className="btn btn--ghost" href="#agentoffice">
+                {t.hero.ctaWork}
+              </a>
             </div>
+            <p className="hero__proof">{t.hero.proof}</p>
           </div>
         </section>
 
-        <section className="section g2" id="agentoffice" aria-labelledby="ao-h">
-          <div className="wrap">
-            <div className="group">
-              <div className="section-head">
+        <div className="building">
+          <div className="shaft" aria-hidden="true">
+            <div className="car">
+              <span className="car__num">3</span>
+            </div>
+          </div>
+
+          {/* 3F AgentOffice */}
+          <section className="floor" id="agentoffice" data-floor={floor("agentoffice")} aria-labelledby="ao-h">
+            <Plate {...split(floor("agentoffice"))} />
+            <div className="room">
+              <div className="stage" data-scene="office">
+                <canvas width={256} height={96} role="img" aria-label={w.alt.office} />
+                <a className="screen" data-anchor-box="screen" href={ao.link.href} target="_blank" rel="noopener noreferrer" aria-label={w.screenLabel}>
+                  <img src="/img/ao-office-full.webp" alt="" width={1600} height={900} loading="lazy" />
+                </a>
+                {w.agents.map((lines, i) => (
+                  <span
+                    key={i}
+                    className={`bubble${i === 2 ? " bubble--warn" : ""}`}
+                    data-anchor={`agent-${i}`}
+                    data-lines={JSON.stringify(lines)}
+                    aria-hidden="true"
+                  >
+                    {lines[0]}
+                  </span>
+                ))}
+                <span className="chip" data-anchor="tray" aria-hidden="true">
+                  {w.approved}
+                </span>
+                <Mug id={3} anchor="mug-screen" label={w.coffee.mug} />
+                <Mug id={4} anchor="mug-sill" label={w.coffee.mug} />
+              </div>
+            </div>
+            <div className="floor__body">
+              <div className="col col--lead">
                 <h2 id="ao-h">
                   {ao.title} <span className="muted">{ao.titleMuted}</span>
                 </h2>
-              </div>
-              <div className="grid grid--top">
-                <div className="span-5 stack-4">
-                  <p className="t-lead">{ao.intro}</p>
-                  <p>
-                    <Ext href={ao.link.href}>{ao.link.label}</Ext>
-                  </p>
-                </div>
-                <div className="span-6 start-7">
-                  <p className="t-label muted rows-label">{ao.builtTitle}</p>
-                  <ul className="rows rows--spec">
-                    {ao.built.map((r) => (
-                      <li key={r.k}>
-                        <span className="rows__name">{r.k}</span>
-                        <p>{r.v}</p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="grid">
-              <article className="card card--row card--open span-6">
-                <h3>{ao.cardProduct.title}</h3>
-                <p>{ao.cardProduct.line}</p>
-                <div className="panel">
-                  <Diagram spec={productSpec} />
-                </div>
-              </article>
-              <article className="card card--row card--open span-6">
-                <h3>{ao.cardSystem.title}</h3>
-                <p>{ao.cardSystem.line}</p>
-                <div className="panel">
-                  <Diagram spec={systemSpec} />
-                </div>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <section className="section" id="guarantees" aria-labelledby="gu-h">
-          <div className="wrap">
-            <div className="section-head">
-              <h2 id="gu-h">{t.guarantees.title}</h2>
-            </div>
-            <div className="grid grid--top">
-              <div className="span-6">
-                <ul className="rows rows--spec">
-                  {t.guarantees.rules.map((r) => (
-                    <li key={r.k}>
-                      <span className="rows__name">{r.k}</span>
-                      <p>{r.v}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="span-6 start-7">
-                <div className="frame frame--photo shot">
-                  <img className="frame__img" src="/img/ao-office-full.webp" alt={t.guarantees.shotAlt} width={1600} height={900} loading="lazy" />
-                </div>
-                <p className="not-yet">
-                  <span className="t-label muted">{t.guarantees.notYetTitle}</span>
-                  {t.guarantees.notYet}
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section
-          className="section ground-inverse"
-          id="crn"
-          aria-labelledby="crn-h"
-          data-moment="line-carries-colour"
-          data-moment-opts='{"from": "base"}'
-        >
-          <div className="wrap">
-            <div className="section-head">
-              <h2 id="crn-h">
-                {t.crn.title} <span className="muted">{t.crn.titleMuted}</span>
-              </h2>
-            </div>
-            <div className="grid grid--top crn-figures">
-              <div className="span-7">
-                <p className="t-label muted">{t.crn.figureLabel}</p>
-                <p className="crn-figure">{t.crn.figure}</p>
-              </div>
-              <div className="span-4 start-9">
-                <p className="t-label muted">{t.crn.onboardingLabel}</p>
-                <p className="crn-figure crn-figure--time">
-                  <span className="sr-only">{t.crn.onboardingSr}</span>
-                  <span aria-hidden="true">
-                    <s>{t.crn.onboardingFrom}</s> → {t.crn.onboardingTo}
-                  </span>
-                </p>
-              </div>
-            </div>
-            <div className="grid grid--top">
-              <div className="span-6 stack-4">
-                <p>{t.crn.body}</p>
+                <p className="lead">{ao.intro}</p>
                 <p>
-                  <span className="t-label muted">{t.crn.featuresLabel}. </span>
-                  {t.crn.features}
+                  <Ext href={ao.link.href}>{ao.link.label}</Ext>
                 </p>
+              </div>
+              <div className="col">
+                <p className="label">{ao.builtTitle}</p>
+                <dl className="spec">
+                  {ao.built.map((r) => (
+                    <div key={r.k}>
+                      <dt>{r.k}</dt>
+                      <dd>{r.v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+              <div className="col col--wide">
+                <p className="label">{t.guarantees.title}</p>
+                <dl className="spec spec--two">
+                  {t.guarantees.rules.map((r) => (
+                    <div key={r.k}>
+                      <dt>{r.k}</dt>
+                      <dd>{r.v}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <p className="note">
+                  <span className="label">{t.guarantees.notYetTitle}</span> {t.guarantees.notYet}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* 2F CRN */}
+          <section className="floor floor--store" id="crn" data-floor={floor("crn")} aria-labelledby="crn-h">
+            <Plate {...split(floor("crn"))} />
+            <div className="room">
+              <div className="stage" data-scene="store">
+                <canvas width={256} height={96} role="img" aria-label={w.alt.store} />
+                <span className="tag" data-anchor="nfe" aria-hidden="true">
+                  {w.nfe}
+                </span>
+                <span className="tag tag--lamp" data-anchor="sefaz" aria-hidden="true">
+                  {w.sefaz}
+                </span>
+                <Mug id={5} anchor="mug-shelf" label={w.coffee.mug} />
+                <Mug id={6} anchor="mug-counter" label={w.coffee.mug} />
+              </div>
+            </div>
+            <div className="floor__body">
+              <div className="col col--lead">
+                <h2 id="crn-h">
+                  {t.crn.title} <span className="muted">{t.crn.titleMuted}</span>
+                </h2>
+                <p className="label">{t.crn.figureLabel}</p>
+                <p className="figure">{t.crn.figure}</p>
+                <p className="label">{t.crn.onboardingLabel}</p>
+                <p className="figure figure--sm">
+                  <s aria-hidden="true">{t.crn.onboardingFrom}</s>
+                  <span aria-hidden="true"> → {t.crn.onboardingTo}</span>
+                  <span className="sr-only">{t.crn.onboardingSr}</span>
+                </p>
+              </div>
+              <div className="col">
+                <p>{t.crn.body}</p>
+                <p className="label">{t.crn.featuresLabel}</p>
+                <p>{t.crn.features}</p>
+                <dl className="spec">
+                  {t.crn.stack.map((r) => (
+                    <div key={r.k}>
+                      <dt>{r.k}</dt>
+                      <dd>{r.v}</dd>
+                    </div>
+                  ))}
+                </dl>
                 <p>
                   <Ext href={t.crn.link.href}>{t.crn.link.label}</Ext>
                 </p>
               </div>
-              <ul className="rows rows--spec span-6 start-7">
-                {t.crn.stack.map((r) => (
-                  <li key={r.k}>
-                    <span className="rows__name">{r.k}</span>
-                    <p>{r.v}</p>
-                  </li>
-                ))}
-              </ul>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="section" id="statement" aria-labelledby="st-h" data-moment="letters-assemble" data-moment-opts='{"spread": 1}'>
-          <div className="wrap">
-            <h2 id="st-h" className="mo-la__type">
-              {t.statement.title}
-            </h2>
-            <p className="mo-la__sub t-lead measure">{t.statement.sub}</p>
-          </div>
-        </section>
+          {/* The elevator: the rule behind the code */}
+          <section className="floor floor--lift" id="statement" data-floor={floor("elevator")} aria-labelledby="st-h">
+            <div className="lift">
+              <div className="lift__text">
+                <h2 id="st-h">{t.statement.title}</h2>
+                <p>{t.statement.sub}</p>
+              </div>
+              <div className="stage lift__stage" data-scene="elevator">
+                <canvas width={120} height={96} role="img" aria-label={w.alt.elevator} />
+                <Mug id={7} anchor="mug-lift" label={w.coffee.mug} />
+              </div>
+            </div>
+          </section>
 
-        <section className="section g2" id="emporio" aria-labelledby="em-h">
-          <div className="wrap">
-            <div className="group">
-              <div className="section-head">
+          {/* 1F Emporio Agent */}
+          <section className="floor" id="emporio" data-floor={floor("emporio")} aria-labelledby="em-h">
+            <Plate {...split(floor("emporio"))} />
+            <div className="room">
+              <div className="stage" data-scene="emporio">
+                <canvas width={256} height={96} role="img" aria-label={w.alt.emporio} />
+                {w.ci.map((c, i) => (
+                  <span key={c} className="tag tag--ok" data-anchor={`ci-${i}`} aria-hidden="true">
+                    {c}
+                  </span>
+                ))}
+                <Mug id={8} anchor="mug-jars" label={w.coffee.mug} />
+              </div>
+            </div>
+            <div className="floor__body">
+              <div className="col col--lead">
                 <h2 id="em-h">
                   {t.emporio.title} <span className="muted">{t.emporio.titleMuted}</span>
                 </h2>
+                <p className="lead">{t.emporio.lead}</p>
+                <ul className="stickies">
+                  {t.emporio.facts.map((f) => (
+                    <li key={f}>{f}</li>
+                  ))}
+                </ul>
+                <p>
+                  <Ext href={t.emporio.repo}>{t.repoLabel}</Ext>
+                </p>
               </div>
-              <div className="grid grid--top">
-                <div className="span-5 stack-4">
-                  <p className="t-lead">{t.emporio.lead}</p>
-                  <ul className="facts">
-                    {t.emporio.facts.map((f) => (
-                      <li key={f}>{f}</li>
-                    ))}
-                  </ul>
-                  <p>
-                    <Ext href={t.emporio.repo}>{t.repoLabel}</Ext>
-                  </p>
-                </div>
-                <figure className="panel transcript span-6 start-7" aria-label={t.emporio.transcriptLabel}>
-                  <div className="d-win">
-                    <div className="d-win__bar">
-                      <span className="d-win__dots">
-                        <i />
-                        <i />
-                        <i />
-                      </span>
-                      <span translate="no">examples/03-order-status-with-verification.md</span>
-                    </div>
-                    <div className="transcript__body" lang="pt-BR">
-                      <p className="transcript__msg transcript__msg--me">Oi, quero saber do meu pedido 8</p>
-                      <pre className="transcript__tool" translate="no">{`get_order_status(order_id=8, email_or_phone="")
+              <figure className="phone col" aria-label={t.emporio.transcriptLabel}>
+                <div className="phone__screen" lang="pt-BR">
+                  <p className="msg msg--me">Oi, quero saber do meu pedido 8</p>
+                  <pre className="msg msg--tool" translate="no">{`get_order_status(order_id=8, email_or_phone="")
 → { "verified": false,
     "error": "No e-mail or phone given. Ask the
               customer for one before calling again." }`}</pre>
-                      <p className="transcript__msg">
-                        Claro! Pra eu localizar o pedido 8, me manda o e-mail ou o telefone usado na compra, por favor.
+                  <p className="msg">Claro! Pra eu localizar o pedido 8, me manda o e-mail ou o telefone usado na compra, por favor.</p>
+                </div>
+                <figcaption className="sr-only">{t.emporio.transcriptLabel}</figcaption>
+              </figure>
+              <div className="col col--wide">
+                <ol className="cork">
+                  {t.emporio.log.map((r) => (
+                    <li key={r.d} className="card">
+                      <h3>{r.d}</h3>
+                      <p>
+                        <span className="label">{t.emporio.cols[1]}</span>
+                        <Rich text={r.w} />
                       </p>
-                    </div>
-                  </div>
-                </figure>
+                      <p>
+                        <span className="label">{t.emporio.cols[2]}</span>
+                        <Rich text={r.e} />
+                      </p>
+                    </li>
+                  ))}
+                </ol>
               </div>
             </div>
-            <div className="log">
-              <table>
-                <thead>
-                  <tr>
-                    {t.emporio.cols.map((c) => (
-                      <th scope="col" key={c} className="t-label">
-                        {c}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {t.emporio.log.map((r) => (
-                    <tr key={r.d}>
-                      <th scope="row">{r.d}</th>
-                      <td>
-                        <Rich text={r.w} />
-                      </td>
-                      <td>
-                        <Rich text={r.e} />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="section" id="crm" aria-labelledby="crm-h">
-          <div className="wrap">
-            <div className="section-head">
-              <h2 id="crm-h">
-                {t.crm.title} <span className="muted">{t.crm.titleMuted}</span>
-              </h2>
+          {/* Mezzanine: Mini CRM */}
+          <section className="floor" id="crm" data-floor={floor("crm")} aria-labelledby="crm-h">
+            <Plate {...split(floor("crm"))} />
+            <div className="room">
+              <div className="stage" data-scene="crm">
+                <canvas width={256} height={96} role="img" aria-label={w.alt.crm} />
+                <Mug id={9} anchor="mug-tray" label={w.coffee.mug} />
+              </div>
             </div>
-            <div className="grid grid--top">
-              <div className="span-5 stack-4">
-                <p className="t-lead">{t.crm.stack}</p>
-                <div className="link-row">
+            <div className="floor__body">
+              <div className="col col--lead">
+                <h2 id="crm-h">
+                  {t.crm.title} <span className="muted">{t.crm.titleMuted}</span>
+                </h2>
+                <p>{t.crm.stack}</p>
+                <p className="link-row">
                   <Ext href={t.crm.repo}>{t.repoLabel}</Ext>
                   <Ext href={t.crm.demo}>{t.demoLabel}</Ext>
+                </p>
+              </div>
+              <div className="col">
+                <dl className="spec">
+                  {t.crm.points.map((r) => (
+                    <div key={r.k}>
+                      <dt>{r.k}</dt>
+                      <dd>{r.v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+          </section>
+
+          {/* Lobby: directory, supply room, doors */}
+          <section className="floor floor--lobby" id="experience" data-floor={floor("lobby")} aria-labelledby="xp-h">
+            <Plate num="L" name={floor("lobby")} />
+            <div className="floor__body">
+              <div className="col col--wide">
+                <h2 id="xp-h">{t.experience.title}</h2>
+                <p className="sub">{t.experience.titleMuted}</p>
+                <div className="board">
+                  <p className="board__title" aria-hidden="true">
+                    {w.directory}
+                  </p>
+                  <ol>
+                    {t.experience.rows.map((r) => (
+                      <li key={r.org}>
+                        <span className="board__when">{r.when}</span>
+                        <span className="board__role">{r.role}</span>
+                        <span className="board__org">{r.org}</span>
+                        <span className="board__what">{r.what}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+                <p className="edu">{t.experience.edu}</p>
+              </div>
+              <div className="col col--wide" id="skills">
+                <h2>{t.skills.title}</h2>
+                <p className="sub">{t.skills.titleMuted}</p>
+                <div className="shelves">
+                  {t.skills.groups.map((g) => (
+                    <div className="shelf" key={g.k}>
+                      <p className="shelf__name">{g.k}</p>
+                      <ul className="shelf__items">
+                        {g.icons.map((id) => (
+                          <li key={id}>
+                            <img src={`/assets/icons/${id}.svg`} alt="" width={ic(id).w} height={ic(id).h} loading="lazy" />
+                            {ICON_NAMES[id] ?? id}
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="shelf__extra">{g.extra}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <ul className="rows rows--spec span-6 start-7">
-                {t.crm.points.map((r) => (
-                  <li key={r.k}>
-                    <span className="rows__name">{r.k}</span>
-                    <p>{r.v}</p>
-                  </li>
-                ))}
-              </ul>
             </div>
-          </div>
-        </section>
-
-        <section className="section" id="experience" aria-labelledby="xp-h">
-          <div className="wrap">
-            <div className="section-head">
-              <h2 id="xp-h">
-                {t.experience.title}. <span className="muted">{t.experience.titleMuted}</span>
-              </h2>
+            <div className="room room--lobby">
+              <div className="stage" data-scene="lobby">
+                <canvas width={256} height={96} role="img" aria-label={w.alt.lobby} />
+                <a className="door" data-anchor-box="door-0" href={mail}>
+                  <span>{w.doors.email}</span>
+                </a>
+                <a className="door" data-anchor-box="door-1" href={t.contact.linkedin} target="_blank" rel="noopener noreferrer">
+                  <span>{w.doors.linkedin}</span>
+                </a>
+                <a className="door" data-anchor-box="door-2" href={t.contact.github} target="_blank" rel="noopener noreferrer">
+                  <span>{w.doors.github}</span>
+                </a>
+                <button className="talk" type="button" data-anchor-box="gabriel" data-lines={JSON.stringify(w.gabriel.lines)} aria-label={w.gabriel.label} hidden />
+                <span className="bubble bubble--talk" data-anchor="gabriel-say" aria-live="polite" />
+                <Mug id={10} anchor="mug-plant" label={w.coffee.mug} />
+              </div>
             </div>
-            <div>
-              <ol className="xp">
-                {t.experience.rows.map((r) => (
-                  <li key={r.org} className="grid grid--top">
-                    <div className="span-6">
-                      <p className="xp__when">{r.when}</p>
-                      <h3 className="xp__role">{r.role}</h3>
-                      <p className="xp__org">{r.org}</p>
-                    </div>
-                    <p className="span-6 start-7">{r.what}</p>
-                  </li>
-                ))}
-              </ol>
-              <p className="xp__edu muted">{t.experience.edu}</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="section" id="skills" aria-labelledby="sk-h">
-          <div className="wrap">
-            <div className="section-head">
-              <h2 id="sk-h">
-                {t.skills.title}. <span className="muted">{t.skills.titleMuted}</span>
-              </h2>
-            </div>
-            <div className="grid grid--top skills">
-              {t.skills.groups.map((g) => (
-                <div className="span-6" key={g.k}>
-                  <h3 className="skills__name">{g.k}</h3>
-                  <div className="ic-chip-row">
-                    {g.icons.map((id) => (
-                      <span className="ic-chip ic-chip--lg" key={id}>
-                        <img
-                          className={`ic ${ic(id).cls}`.trim()}
-                          src={`/assets/icons/${id}.svg`}
-                          alt=""
-                          width={Math.round(ic(id).w * 0.55)}
-                          height={Math.round(ic(id).h * 0.55)}
-                          loading="lazy"
-                        />
-                        {ICON_NAMES[id] ?? id}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="skills__extra">{g.extra}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </main>
 
-      <footer className="footer closing" id="contact" aria-labelledby="close-h">
-        <div className="wrap">
-          <div className="closing__cta close--word">
-            <div className="section-head--split">
-              <div>
-                <h2 id="close-h">{t.contact.title}</h2>
-                <p className="t-lead">{t.contact.lead}</p>
-              </div>
-              <a className="btn btn--primary" href={mail}>
-                {t.hero.ctaEmail}
-                <Arrow />
+      <footer className="street" id="contact" aria-labelledby="close-h">
+        <div className="street__inner">
+          <h2 id="close-h">{t.contact.title}</h2>
+          <p className="lead">{t.contact.lead}</p>
+          <div className="btn-row">
+            <a className="btn btn--amber" href={mail}>
+              {t.contact.email}
+            </a>
+            <button className="btn btn--ghost" type="button" data-copy={t.contact.email} data-copied={w.copied} hidden>
+              {w.copy}
+            </button>
+          </div>
+          <ul className="street__links">
+            <li>
+              <Ext href={t.contact.linkedin}>LinkedIn</Ext>
+            </li>
+            <li>
+              <Ext href={t.contact.github}>GitHub</Ext>
+            </li>
+            <li>
+              <a href={t.nav.switchHref} hrefLang={other} lang={other}>
+                {t.nav.switchLabel}
               </a>
-            </div>
-            <p className="close__word" aria-hidden="true">
-              {t.contact.word}
-            </p>
-          </div>
-          <div className="closing__links">
-            <div className="grid">
-              <div className="span-4 stack-4">
-                <a className="nav__logo" href="#top">
-                  <span className="mark" data-mark="dots" aria-hidden="true" />
-                  Gabriel Moura
-                </a>
-                <p className="footer__lede">{t.contact.lede}</p>
-              </div>
-              <div className="span-2 start-7 footer__col">
-                <h3>{t.contact.colWork}</h3>
-                <ul>
-                  {t.nav.workGroups.flatMap((g) => g.items).map((it) => (
-                    <li key={it.href}>
-                      <a href={it.href}>{it.name}</a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="span-2 footer__col">
-                <h3>{t.contact.colAbout}</h3>
-                <ul>
-                  {t.nav.items.map((it) => (
-                    <li key={it.href}>
-                      <a href={it.href}>{it.label}</a>
-                    </li>
-                  ))}
-                  <li>
-                    <a href={t.nav.switchHref} hrefLang={other} lang={other}>
-                      {t.nav.switchLabel}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="span-2 footer__col">
-                <h3>{t.contact.colContact}</h3>
-                <ul>
-                  <li>
-                    <a href={mail}>{t.contact.emailLabel}</a>
-                  </li>
-                  <li>
-                    <a href={t.contact.linkedin} target="_blank" rel="noopener noreferrer">
-                      LinkedIn
-                    </a>
-                  </li>
-                  <li>
-                    <a href={t.contact.github} target="_blank" rel="noopener noreferrer">
-                      GitHub
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="footer__legal">
-              <span>
-                &copy; 2026 Gabriel Moura · <a href={mail}>{t.contact.email}</a>
-              </span>
-              <span>
-                {t.contact.trademarks}{" "}
-                <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
-                  {t.contact.source}
-                </a>
-              </span>
-            </div>
-          </div>
+            </li>
+          </ul>
+          <p className="street__legal">
+            <span>&copy; 2026 Gabriel Moura · {t.contact.lede}</span>
+            <span>
+              {t.contact.trademarks}{" "}
+              <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
+                {t.contact.source}
+              </a>
+            </span>
+          </p>
         </div>
       </footer>
+
+      <div className="hud" hidden>
+        <span className="hud__floor" aria-hidden="true">
+          {floor("street")}
+        </span>
+        <button className="hud__coffee" type="button" aria-label={w.coffee.counter} aria-expanded="false">
+          <Cup />
+          <b>0</b>/10
+        </button>
+        <p className="hud__tip" hidden>
+          {w.coffee.hint}
+        </p>
+        <p className="hud__done" hidden>
+          {w.coffee.done} <a href={mail}>{w.coffee.doneCta}</a>
+        </p>
+        <span className="sr-only" aria-live="polite" data-coffee-live data-found={w.coffee.found} />
+      </div>
     </>
   );
 }
