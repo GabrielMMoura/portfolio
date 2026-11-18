@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gabriel Moura · portfolio
 
-## Getting Started
+Personal portfolio of a full stack software engineer (TypeScript, React, Node.js, PostgreSQL) focused on SaaS, AI integrations and real-time apps. English at `/`, Portuguese at `/pt`.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js 16 (App Router) with `output: "export"`: the whole site is static HTML in `out/`
+- Tailwind CSS v4 and shadcn/ui (`button` only); IBM Plex Sans and Mono via `next/font`
+- No animation library: the architecture diagram is an SVG animated with CSS, paused off screen with an `IntersectionObserver` and static under `prefers-reduced-motion`
+
+## Structure
+
+```
+src/app/(en)/        English root layout and page  →  /
+src/app/(pt)/pt/     Portuguese root layout and page  →  /pt
+src/content/         en.ts and pt.ts: every word on the site, same shape
+src/components/site/ sections, diagram, primitives
+DESIGN.md            visual direction, tokens and rules for this site
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Two route groups give each language its own root layout, so `<html lang>` is correct in the static HTML.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Content rule
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Every number, project and technology on the site comes from the resume, the public repositories ([emporio-agent](https://github.com/GabrielMMoura/emporio-agent), [mini-crm-sdr-ai](https://github.com/GabrielMMoura/mini-crm-sdr-ai)) or the product sites ([appcrn.com.br](https://www.appcrn.com.br), [useagentoffice.com](https://useagentoffice.com)). No testimonials, client logos or phone number.
 
-## Learn More
+## Run
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # static site in out/
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Set `NEXT_PUBLIC_SITE_URL` to the final domain so canonical and hreflang URLs point to it.

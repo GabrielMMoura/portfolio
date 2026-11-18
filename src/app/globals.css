@@ -1,26 +1,225 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+@source not "../../.taste-skill";
+@source not "../../out";
+
+/* Tokens: DESIGN.md (taste-skill stone-blueprint + plex, plus --paper). Light theme only. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #dfdedb;
+  --surface: #d3d2ce;
+  --paper: #ecebe7;
+  --ink: #26251e;
+  --muted: #46443e;
+  --line: #bdbbb5;
+  --accent: #2456d6;
+  --accent-ink: #ffffff;
+  --inv-bg: #26251e;
+  --inv-surface: #313029;
+  --inv-ink: #dfdedb;
+  --inv-muted: #b4b3ae;
+  --inv-line: #47463f;
+  --ok: #2f6b3a;
+  --warn: #9a5b00;
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --radius: 6px;
+
+  /* shadcn primitives mapped onto the project tokens */
+  --background: var(--bg);
+  --foreground: var(--ink);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-ink);
+  --secondary: var(--paper);
+  --secondary-foreground: var(--ink);
+  --muted-foreground: var(--muted);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--accent);
 }
 
 @theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-inv-bg: var(--inv-bg);
+  --color-inv-surface: var(--inv-surface);
+  --color-inv-ink: var(--inv-ink);
+  --color-inv-muted: var(--inv-muted);
+  --color-inv-line: var(--inv-line);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, Menlo, Consolas, monospace;
+  --font-heading: var(--font-plex-sans), system-ui, sans-serif;
+  --radius-sm: 4px;
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-line;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 72px;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3 {
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .inv :focus-visible {
+    outline-color: var(--inv-ink);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Links: underline draws in on hover (DESIGN.md, Movimento). */
+.link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 180ms var(--ease-out), color 180ms var(--ease-out);
+}
+.link:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Hero enters once on load. The h1 is never animated (LCP). */
+@media (prefers-reduced-motion: no-preference) {
+  .enter {
+    animation: enter 600ms var(--ease-out) both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+
+}
+
+/* Architecture diagram: a dash travels each edge in sequence; ~7s cycle. */
+.flow {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 7 93;
+  stroke-dashoffset: 7;
+  opacity: 0;
+}
+.flow-state {
+  stroke: var(--ink);
+}
+.flow-approval {
+  stroke: var(--warn);
+}
+.node-approval rect {
+  transition: stroke 200ms;
+}
+.approval-tag {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .diagram.is-live .flow {
+    animation: flow 7s var(--ease-out) infinite;
+    animation-delay: var(--d, 0s);
+  }
+  .diagram.is-live .node-approval rect {
+    animation: approval 7s linear infinite;
+  }
+  .diagram.is-live .approval-tag {
+    animation: approval-tag 7s linear infinite;
+  }
+  @keyframes flow {
+    0% {
+      stroke-dashoffset: 7;
+      opacity: 1;
+    }
+    11% {
+      stroke-dashoffset: -93;
+      opacity: 1;
+    }
+    11.5%,
+    100% {
+      stroke-dashoffset: -93;
+      opacity: 0;
+    }
+  }
+  @keyframes approval {
+    0%,
+    66% {
+      stroke: var(--line);
+    }
+    68%,
+    84% {
+      stroke: var(--warn);
+    }
+    86%,
+    100% {
+      stroke: var(--line);
+    }
+  }
+  @keyframes approval-tag {
+    0%,
+    66% {
+      opacity: 0;
+    }
+    68%,
+    84% {
+      opacity: 1;
+    }
+    86%,
+    100% {
+      opacity: 0;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .approval-tag {
+    opacity: 1;
+  }
 }
