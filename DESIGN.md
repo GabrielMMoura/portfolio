@@ -26,61 +26,40 @@
 | ADRs (Architecture Decision Records, Nygard) | Decisão → contexto → consequência como estrutura de leitura para engenheiros | Formato burocrático completo |
 | useagentoffice.com (do próprio Gabriel) | Mostrar o produto real em vez de mockup inventado | A paleta azul/roxa e as fontes do produto, para o portfólio não parecer a landing dele |
 
+## Revisão de 17/11/2026: o kit da taste-skill
+O Gabriel achou a primeira versão estática e sem o plugin. A camada visual foi refeita com o kit da
+taste-skill (`public/assets`, copiado sem edição, licença MIT em `public/assets/LICENSE-taste-skill.txt`).
+O conteúdo verificado e as regras de dados continuam os mesmos.
+
+Sorteio (scripts da taste-skill, histórico em `.taste-skill/`, fora do git):
+- tipo `software`; paleta `stone-blueprint`; par `plex` (IBM Plex Sans + Mono); raio `soft`
+- hero `collage`: texto em span-5 e a tela real do AgentOffice numa janela sobre fundo iluminado (span-6 start-7).
+  O primeiro sorteio foi `triptych`, que pedia de 3 a 5 peças por conjunto. Como só existe uma captura real, o sorteio foi refeito com `--has ui`.
+- efeito `silk-folds` no fundo do hero (o único WebGL vivo), com botão de pausa do kit
+- momentos `letters-assemble` em #statement ("Facts come from code.") e `line-carries-colour` em #crn (troca para o fundo escuro)
+- nav-mega, close-word, footer-columns, ritmo dark-band, botões pill, marca dots, fundo sand
+
 ## Tokens
-Ponto de partida: taste-skill `start.mjs` → paleta `stone-blueprint`, par `plex`, raio `soft`.
+Os do `start.mjs`, sem alteração: `--p-bg #dfdedb`, `--p-surface #d3d2ce`, `--p-ink #26251e`,
+`--p-muted #5a5850` (só rótulos), `--p-accent/--p-action #2456d6`, inverso `#26251e` / `#dfdedb`.
+O kit deriva `--ink`, `--muted`, `--line`, `--surface` e a escala `--s-1…--s-10`. O `public/site.css` usa só esses tokens.
 
-| Token | Valor | Uso |
-|---|---|---|
-| `--bg` | `#dfdedb` | fundo de pedra |
-| `--surface` | `#d3d2ce` | blocos de dados, linhas de tabela alternadas |
-| `--paper` | `#ecebe7` | moldura do screenshot e painéis de decisão (o único acréscimo à paleta sorteada) |
-| `--ink` | `#26251e` | texto |
-| `--muted` | `#5a5850` | texto suave (contraste ≈ 5.3:1 sobre `--bg`) |
-| `--line` | `#bdbbb5` | bordas de 1px e divisórias (não é texto) |
-| `--accent` | `#2456d6` | links, foco, pulsos do diagrama (≈ 4.9:1 sobre `--bg`; branco sobre ele ≈ 6.5:1) |
-| `--inv-bg` / `--inv-ink` | `#26251e` / `#dfdedb` | rodapé de contato e bloco de números do CRN |
-| `--ok` | `#2f6b3a` | estado "aprovado" no diagrama |
-| `--warn` | `#9a5b00` | estado "aguardando aprovação" no diagrama |
+## Movimento (nível 3, com motivo)
+- Entrada do hero (motion.js), uma vez por visita.
+- Shader `silk-folds` atrás da janela do hero e loop de 3 passos no cartão de aprovação. Os dois mostram o fluxo que é o diferencial do produto: rascunho, espera, aprovação.
+- Dois diagramas do kit com pulsos (bowtie de fontes e aprovação; lanes da fila de tarefas), com ícones reais.
+- Dois momentos, cada um na sua seção. Nada mais se move com o scroll.
+- Com prefers-reduced-motion, nada se move: os momentos ficam em `is-done`, os loops param e o conteúdo fica inteiro.
 
-- Contraste: texto/fundo ≥ 4.5:1 conferido nos pares acima. `--line` só em borda.
-- Espaçamento: 4, 8, 12, 16, 24, 32, 48, 64, 96, 128.
-- Raio: 6px (botões, molduras). Tabelas e linhas sem raio.
-- Sombra: nenhuma. Separação por borda de 1px e por mudança de superfície.
-
-## Tipografia
-- **IBM Plex Sans** (títulos 500, texto 400): grotesca de engenharia, sóbria, desenhada para interfaces técnicas. Combina com a ideia de documento de design e não é a Inter das landings de SaaS.
-- **IBM Plex Mono** (400/500): rótulos de metadados, números de seção, nomes de tecnologia em tabela, legendas do diagrama. Nunca em parágrafo.
-- Escala: 14 / 16 / 18 / 22 / 28 / 40 / 56 (hero 56 no desktop, 36 no mobile). Tracking −0.025em em ≥ 28.
-- Texto corrido com no máximo 68ch. Títulos em sentence case.
-
-## Layout
-- Largura máxima 1200px, 12 colunas, margem lateral de 24px (16px no mobile). Bordas esquerda e direita iguais em todas as seções.
-- Cada seção abre com uma linha de metadados em mono (`02 · Main project · 2023 to present`), ao estilo dos RFDs.
-- Ritmo (cada seção tem forma própria, nenhuma repete "título + 3 cards"):
-  1. **Hero**: duas colunas. À esquerda, nome, cargo, frase de posicionamento, tabela de fatos e três contatos. À direita, a captura real do AgentOffice em moldura `--paper`.
-  2. **AgentOffice** (projeto principal, a seção mais longa): texto do que é e do que foi construído; diagrama de arquitetura animado (o momento da página); lista de decisões e restrições em linhas; o que ainda não faz.
-  3. **CRN**: bloco invertido escuro com os números do currículo em tabela grande, depois stack e integrações em duas colunas.
-  4. **Projetos menores**: Emporio Agent em formato de registro de decisões (decisão / motivo / evidência, citando o README); Mini CRM SDR em uma linha de resumo e uma lista curta.
-  5. **Experiência**: tabela cronológica (período, cargo, empresa, uma linha).
-  6. **Skills**: lista agrupada, como no currículo, sem ícones.
-  7. **Contato**: rodapé invertido com e-mail, LinkedIn e GitHub.
-- Mobile 390: tudo em uma coluna; tabelas viram listas de pares rótulo/valor; o diagrama vira vertical.
-
-## Movimento
-- **Nível 2**: entrada única do hero no carregamento, revelações pontuais no scroll e um momento animado, o diagrama de arquitetura do AgentOffice com pulsos indo da UI aos workers e voltando por Socket.IO, parando na fila de aprovação. Motivo: "tempo real" é parte do posicionamento, e o diagrama mostra o fluxo em vez de dizer "real-time". Nível 3 (3D/WebGL) descartado: não há objeto físico nem cena que acrescente informação, e pesaria no carregamento para recrutador.
-- Biblioteca: CSS (keyframes e `offset-path`/SVG) + IntersectionObserver. Sem GSAP, sem three.js. `motion` só se alguma interação precisar de física, o que não é o caso.
-- Durações: 180ms para hover e foco; 500ms para revelação, `cubic-bezier(0.2, 0.7, 0.2, 1)`; ciclo do diagrama de cerca de 6s.
-- `prefers-reduced-motion`: sem entrada, sem revelação, diagrama estático com todos os estados visíveis.
-- Hover: links sublinham ao passar o mouse, botões mudam de superfície (sem pulo), linhas de tabela clicáveis ganham `--surface`.
-
-## Componentes
-- Base: shadcn/ui (`base-nova`), só `button`. O resto é HTML semântico (tabelas, `dl`, `ol`) estilizado com Tailwind e tokens.
-- Registries externos: nenhum. Nada de componentes "da moda" (marquee, shimmer, beam, bento).
-- Componentes de destaque: `ArchitectureDiagram` (SVG próprio), `FactTable`, `DecisionLog`, `LangSwitch`.
+## Implementação
+- O Next.js 16 com `output: "export"` renderiza o HTML. `scripts/strip-react.mjs` tira o runtime do React do `out/`,
+  porque o JS do kit manipula o DOM e brigaria com a hidratação. O site não tem estado de cliente.
+- Ícones reais via `icons.mjs` em `public/assets/icons` (logos CC0 e Simple Icons), com créditos em `icons-credits.json`.
+- shadcn/ui e Tailwind foram removidos nessa revisão: o sistema de botões, cartões e grid é o do kit.
 
 ## Idiomas
 - Inglês em `/` (principal) e português completo em `/pt`, mesmo conteúdo, `lang` correto em cada um e `hreflang` alternado.
-- Os números são idênticos nas duas versões. A frase do CRN em inglês é exatamente "~BRL 2M (~US$380K) in sales and 4,000 to 8,000 tax invoices a month". O Gabriel confirmou em 17/11/2026 que os R$ 2M são mensais.
+- Os números são idênticos nas duas versões. A frase do CRN em inglês é exatamente "~BRL 2M (~US$380K) in sales and 4,000 to 8,000 tax invoices a month". O Gabriel confirmou em 17/11/2026 que os R$ 2M são mensais, que o fuso é UTC-4 (Cuiabá; o currículo diz UTC-3) e que pode ser contratado como contractor ou via EOR, sem visto de trabalho nos EUA.
 
 ## Proibições deste projeto
 - Nenhum número, cliente, projeto ou tecnologia fora das fontes listadas. Nada de "10x", "+N clientes", porcentagens de habilidade ou barras de skill.

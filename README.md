@@ -4,21 +4,20 @@ Personal portfolio of a full stack software engineer (TypeScript, React, Node.js
 
 ## Stack
 
-- Next.js 16 (App Router) with `output: "export"`: the whole site is static HTML in `out/`
-- Tailwind CSS v4 and shadcn/ui (`button` only); IBM Plex Sans and Mono via `next/font`
-- No animation library: the architecture diagram is an SVG animated with CSS, paused off screen with an `IntersectionObserver` and static under `prefers-reduced-motion`
+- Next.js 16 (App Router) with `output: "export"`; `scripts/strip-react.mjs` then removes the React runtime from `out/`, so the site ships as plain HTML plus the kit's vanilla JS
+- Visual system: the [taste-skill](https://github.com/Leonxlnx/taste-skill) kit in `public/assets` (MIT, unedited): grid, type, buttons, hero entrance, a `silk-folds` WebGL ground, pulsing diagrams and two scroll moments, all at rest under `prefers-reduced-motion`
+- IBM Plex Sans and Mono; real tool logos fetched with the kit's `icons.mjs` (credits in `public/assets/icons/icons-credits.json`)
 
 ## Structure
 
 ```
-src/app/(en)/        English root layout and page  →  /
-src/app/(pt)/pt/     Portuguese root layout and page  →  /pt
+src/app/(en)/        English root layout and page  ->  /
+src/app/(pt)/pt/     Portuguese root layout and page  ->  /pt
 src/content/         en.ts and pt.ts: every word on the site, same shape
-src/components/site/ sections, diagram, primitives
-DESIGN.md            visual direction, tokens and rules for this site
+src/components/site/ RootDocument (head, kit CSS and scripts) and SitePage (the sections)
+public/site.css      page CSS for what the kit lacks, kit tokens only
+DESIGN.md            visual direction, the deal and the rules for this site
 ```
-
-Two route groups give each language its own root layout, so `<html lang>` is correct in the static HTML.
 
 ## Content rule
 

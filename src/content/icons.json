@@ -1,0 +1,140 @@
+{
+ "typescript": {
+  "w": 40,
+  "h": 40,
+  "cls": "",
+  "wide": false
+ },
+ "react": {
+  "w": 40,
+  "h": 36,
+  "cls": "",
+  "wide": false
+ },
+ "nextjs": {
+  "w": 40,
+  "h": 40,
+  "cls": "",
+  "wide": false
+ },
+ "tailwindcss": {
+  "w": 40,
+  "h": 24,
+  "cls": "ic-land",
+  "wide": false
+ },
+ "nodejs": {
+  "w": 35,
+  "h": 40,
+  "cls": "",
+  "wide": false
+ },
+ "fastify": {
+  "w": 40,
+  "h": 26,
+  "cls": "ic-land ic-ink",
+  "wide": false
+ },
+ "postgres": {
+  "w": 39,
+  "h": 40,
+  "cls": "",
+  "wide": false
+ },
+ "redis": {
+  "w": 40,
+  "h": 34,
+  "cls": "",
+  "wide": false
+ },
+ "supabase": {
+  "w": 39,
+  "h": 40,
+  "cls": "",
+  "wide": false
+ },
+ "socket.io": {
+  "w": 40,
+  "h": 40,
+  "cls": "",
+  "wide": false
+ },
+ "openai": {
+  "w": 39,
+  "h": 40,
+  "cls": "ic-ink",
+  "wide": false
+ },
+ "anthropic": {
+  "w": 40,
+  "h": 28,
+  "cls": "ic-land ic-ink",
+  "wide": false
+ },
+ "langchain": {
+  "w": 40,
+  "h": 40,
+  "cls": "ic-ink",
+  "wide": false
+ },
+ "python": {
+  "w": 40,
+  "h": 40,
+  "cls": "",
+  "wide": false
+ },
+ "stripe": {
+  "w": 40,
+  "h": 17,
+  "cls": "ic-wide",
+  "wide": true
+ },
+ "docker": {
+  "w": 40,
+  "h": 29,
+  "cls": "ic-land",
+  "wide": false
+ },
+ "github-actions": {
+  "w": 40,
+  "h": 40,
+  "cls": "",
+  "wide": false
+ },
+ "oracle": {
+  "w": 40,
+  "h": 5,
+  "cls": "ic-wide",
+  "wide": true
+ },
+ "playwright": {
+  "w": 40,
+  "h": 30,
+  "cls": "ic-land",
+  "wide": false
+ },
+ "vitest": {
+  "w": 40,
+  "h": 37,
+  "cls": "",
+  "wide": false
+ },
+ "sentry": {
+  "w": 40,
+  "h": 35,
+  "cls": "",
+  "wide": false
+ },
+ "grafana": {
+  "w": 37,
+  "h": 40,
+  "cls": "",
+  "wide": false
+ },
+ "prometheus": {
+  "w": 40,
+  "h": 40,
+  "cls": "",
+  "wide": false
+ }
+}
