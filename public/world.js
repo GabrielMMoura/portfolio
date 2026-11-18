@@ -194,12 +194,14 @@
 
   /* Street: the facade at night. Its width follows the hero's shape. */
   SCENES.facade = {
-    layout(W, H, overlay) {
+    layout(W, H, overlay, hdr) {
       const bw = 124;
       const wide = overlay;
       const x0 = wide ? W - bw - Math.round(W * (W >= 280 ? 0.07 : 0.03)) : Math.round((W - bw) / 2);
       const door = x0 + Math.round(bw / 2);
-      const L = { W, H, bw, x0, top: 42, street: H - 20, door, lamp: Math.min(W - 6, x0 + bw + 9), bench: x0 + 8 };
+      // under a fixed header the roof sign starts below it
+      const top = Math.max(42, Math.ceil(hdr || 0) + 34);
+      const L = { W, H, bw, x0, top, street: H - 20, door, lamp: Math.min(W - 6, x0 + bw + 9), bench: x0 + 8, walkFrom: overlay ? x0 - 40 : -12 };
       this.L = L;
       const r = rng(7);
       this.order = Array.from({ length: 15 }, (_, i) => i).sort(() => r() - 0.5);
@@ -270,9 +272,10 @@
       R(g, x0, top + 3, bw, 2, C.brickD);
       // windows: 3 floors x 5, lit one by one (agents coming online)
       const cols = 5, ww = 14, wh = 18, gap = Math.floor((bw - 12 - cols * ww) / (cols - 1));
+      const step = Math.min(30, Math.floor((street - 20 - 8 - wh - top - 12) / 2));
       for (let row = 0; row < 3; row++) {
         for (let c = 0; c < cols; c++) {
-          const k = row * cols + c, wx = x0 + 6 + c * (ww + gap), wy = top + 12 + row * 30;
+          const k = row * cols + c, wx = x0 + 6 + c * (ww + gap), wy = top + 12 + row * step;
           const idx = this.order.indexOf(k);
           let lit = reduce || t > 6 + idx * 4;
           if (!reduce && t > 80 && ((t >> 4) + k * 5) % 23 === 0) lit = false;
@@ -299,7 +302,7 @@
         }
       }
       // ground floor: shop windows, awning, door
-      const gy = top + 98;
+      const gy = street - 20;
       R(g, x0, gy - 2, bw, 2, C.stone);
       R(g, x0 + 6, gy + 6, door - x0 - 22, street - gy - 10, C.amber);
       R(g, door + 16, gy + 6, x0 + bw - door - 22, street - gy - 10, C.amber);
@@ -365,7 +368,7 @@
     walker(t) {
       const { door } = this.L;
       const end = door - 5;
-      const start = -12;
+      const start = this.L.walkFrom;
       const walkT = Math.ceil((end - start) / 1.5);
       const P = walkT + 40;
       if (reduce) return { phase: "walk", x: end - 30, step: 0 };
@@ -380,7 +383,7 @@
   SCENES.office = {
     W: 256, H: 96, still: 92,
     anchors: {
-      "agent-0": [99, 61], "agent-1": [139, 61], "agent-2": [179, 61], tray: [224, 66],
+      "agent-0": [109, 61], "agent-1": [149, 61], "agent-2": [189, 61], tray: [224, 66],
       "mug-screen": [33, 64], "mug-sill": [243, 60],
     },
     boxes: { screen: [12, 18, 64, 36] },
@@ -608,6 +611,7 @@
       R(g, 178, 14, 66, 42, C.woodDD);
       R(g, 180, 16, 62, 38, "#1d2a2e");
       const P = 96, k = reduce ? this.still : t % P;
+      this.k = k;
       const done = k >= 50;
       for (let i = 0; i < 2; i++) {
         const lit = done || (i === 0 && k > 20);
@@ -629,6 +633,7 @@
       R(g, 113, 61, 7, 10, "#f1ede4");
       R(g, 115, 62, 4, 2, C.green); R(g, 114, 65, 4, 2, C.paper); R(g, 115, 68, 4, 2, C.green);
       seated(g, 170, 71, GABRIEL, k < 50 ? t % 2 === 0 : false, false);
+      this.running = k < 50;
       plant(g, 230, F, true);
       R(g, 186, 74, 18, 10, C.woodD);
       R(g, 186, 74, 18, 2, C.woodL);
@@ -638,6 +643,10 @@
       R(g, 193, 67, 3, 2, C.amber);
       if (!reduce && t % 6 < 3) R(g, 194, 56, 1, 3, C.whiteD);
     },
+  };
+
+  SCENES.emporio.overlay = function (stage) {
+    stage.querySelectorAll(".tag--ok").forEach((el, i) => el.classList.toggle("is-running", this.running && (i === 1 || this.k < 20)));
   };
 
   /* Mezzanine, Mini CRM: a sticky note moves on, the AI writes on it */
@@ -771,7 +780,9 @@
       s.bg = back.getContext("2d");
       s.fg = front.getContext("2d");
       const overlay = getComputedStyle(stage).position === "absolute";
-      const { anchors, boxes } = def.layout(W, H, overlay);
+      const header = document.querySelector(".top");
+      const hdr = overlay && header ? (header.offsetHeight / h) * H : 0;
+      const { anchors, boxes } = def.layout(W, H, overlay, hdr);
       place(stage, W, H, anchors, boxes);
       fitSign(sign);
       s.render(s.last || 0);
@@ -939,6 +950,7 @@
     let n = -1, hide;
     btn.hidden = false;
     btn.addEventListener("click", () => {
+      btn.classList.add("is-used");
       n = (n + 1) % lines.length;
       if (say) {
         say.textContent = lines[n];

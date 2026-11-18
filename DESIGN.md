@@ -44,15 +44,16 @@ O site é um prédio de tijolo à noite, visto em corte lateral, com um andar po
 - Mezanino, Mini CRM: quadro kanban com post-its que mudam de coluna.
 - Portaria: experiência num quadro de letras de recepção, skills nas prateleiras do almoxarifado e contato em três portas.
 - Personagem: o Gabriel em pixel art (aprovado por ele em 18/11/2026). É genérico (óculos, camiseta) e não tenta ser um retrato.
-- Jogo: 10 xícaras de café escondidas nas cenas, com um contador pequeno no canto. São botões de verdade, alcançáveis por teclado.
+- Jogo: 10 xícaras de café escondidas nas cenas, com o contador no cabeçalho (não cobre o texto). São botões de verdade, alcançáveis por teclado, com o número de cada uma no nome.
 
 ## Tokens
 - Noite: `--night #10222b`, `--night-2 #183540`. Tijolo: `--brick #a8482f`, `--brick-dark #7a321f`.
-- Luz de janela e ação no escuro: `--amber #ffbe5c`. Ação no claro: `--terracotta #b8452a`.
+- Luz de janela e ação no escuro: `--amber #ffbe5c`. Rótulos e ação no claro: `--terracotta #a63c22` (5,3:1 sobre a parede; o #b8452a inicial dava 4,49:1).
 - Interior: `--wall #f4ead7`, `--wall-2 #e9dcc2`, `--wood #b9784a`, `--wood-dark #7d4c2c`. Plantas: `--leaf #4f8a4b`.
 - Texto: `--ink #221a15`, `--ink-soft #5b4a3d` (AA sobre `--wall`). Papel: `--paper #fffaf0`.
-- Tipos: Big Shoulders Display (letreiro e títulos, como os de prédio), Instrument Sans (texto) e Pixelify Sans
-  (só para placas, números de andar e o HUD, nunca para texto corrido).
+- Tipos: Big Shoulders Display (letreiro e títulos, como os de prédio), Instrument Sans (texto, portas e a etiqueta da captura) e
+  Pixelify Sans (placas, números de andar, rótulos curtos, balões das cenas e o contador; nunca texto corrido).
+- Cada andar claro tem um tom de parede: AgentOffice creme, CRN pêssego `#f6e4cf`, Emporio sálvia `#eef0dd`, Mini CRM frio `#e7eef0`.
 - A paleta do AgentOffice (azul-marinho e roxo) só aparece dentro da captura real do produto.
 
 ## Movimento (nível 3, com motivo)

@@ -22,6 +22,7 @@ export const pt: Dict = {
   },
   hero: {
     title: "Engenheiro full stack para SaaS e produtos de IA",
+    stack: "4+ anos em produção · TypeScript, React, Node.js, PostgreSQL",
     lead: "Fundei e construí o CRN, um ERP de varejo usado por lojistas pagantes, que processa cerca de R$ 2 milhões (~US$ 380 mil) em vendas e de 4.000 a 8.000 notas fiscais por mês, e o AgentOffice, uma plataforma de agentes de IA em tempo real.",
     ctaEmail: "Mandar e-mail",
     ctaWork: "Ver o AgentOffice",
@@ -176,6 +177,10 @@ export const pt: Dict = {
       ["Buscando no Drive", "Mapear 20 contas"],
       ["Precisa de você", "Rascunho pronto"],
     ],
+    floorsMenu: "Andares",
+    emailShort: "E-mail",
+    screenTag: "Captura real · useagentoffice.com",
+    talkHint: "Clique em mim",
     approved: "Aprovado",
     screenLabel: "Abrir useagentoffice.com, o escritório real do AgentOffice",
     nfe: "NF-e",

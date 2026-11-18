@@ -47,7 +47,7 @@ function Cup() {
 
 function Mug({ id, anchor, label }: { id: number; anchor: string; label: string }) {
   return (
-    <button className="mug" type="button" data-mug={id} data-anchor={anchor} aria-label={label} hidden>
+    <button className="mug" type="button" data-mug={id} data-anchor={anchor} aria-label={`${label} (${id}/10)`} hidden>
       <Cup />
     </button>
   );
@@ -83,8 +83,19 @@ export function SitePage({ t }: { t: Dict }) {
       <header className="top">
         <a className="brand" href="#top">
           <span className="brand__mark" aria-hidden="true" />
-          Gabriel Moura
+          <span className="brand__name">Gabriel Moura</span>
         </a>
+        <details className="floors">
+          <summary>{w.floorsMenu}</summary>
+          <nav aria-label={w.floorsMenu}>
+            <a href="#agentoffice">AgentOffice</a>
+            <a href="#crn">CRN</a>
+            <a href="#emporio">Emporio Agent</a>
+            <a href="#crm">Mini CRM</a>
+            <a href="#experience">{t.nav.items[0].label}</a>
+            <a href="#skills">{t.nav.items[1].label}</a>
+          </nav>
+        </details>
         <nav className="top__nav" aria-label="Main">
           <a href="#agentoffice">AgentOffice</a>
           <a href="#crn">CRN</a>
@@ -95,14 +106,43 @@ export function SitePage({ t }: { t: Dict }) {
             <span className="sr-only"> · {t.nav.switchLabel}</span>
           </a>
         </nav>
+        <div className="hud" hidden>
+          <button className="hud__coffee" type="button" aria-label={w.coffee.counter} aria-expanded="false">
+            <Cup />
+            <b>0</b>/10
+          </button>
+          <p className="hud__tip" hidden>
+            {w.coffee.hint}
+          </p>
+          <p className="hud__done" hidden>
+            {w.coffee.done} <a href={mail}>{w.coffee.doneCta}</a>
+          </p>
+          <span className="sr-only" aria-live="polite" data-coffee-live data-found={w.coffee.found} />
+        </div>
         <a className="btn btn--amber btn--sm" href={mail}>
-          {t.hero.ctaEmail}
+          <span className="long">{t.hero.ctaEmail}</span>
+          <span className="short">{w.emailShort}</span>
         </a>
       </header>
 
       <main id="main">
         {/* Street: the building at night */}
         <section className="hero" id="top" data-floor={floor("street")} aria-labelledby="hero-h">
+          <div className="hero__text">
+            <p className="eyebrow">{w.eyebrow}</p>
+            <h1 id="hero-h">{t.hero.title}</h1>
+            <p className="hero__stack">{t.hero.stack}</p>
+            <p className="hero__lead">{t.hero.lead}</p>
+            <div className="btn-row">
+              <a className="btn btn--amber" href={mail}>
+                {t.hero.ctaEmail}
+              </a>
+              <a className="btn btn--ghost" href="#agentoffice">
+                {t.hero.ctaWork}
+              </a>
+            </div>
+            <p className="hero__proof">{t.hero.proof}</p>
+          </div>
           <div className="hero__scene stage" data-scene="facade">
             <canvas className="layer" data-layer="back" aria-hidden="true" />
             <p className="sign" data-anchor-box="sign" aria-hidden="true">
@@ -115,20 +155,6 @@ export function SitePage({ t }: { t: Dict }) {
             <canvas className="layer" data-layer="front" role="img" aria-label={w.alt.facade} />
             <Mug id={1} anchor="mug-bench" label={w.coffee.mug} />
             <Mug id={2} anchor="mug-awning" label={w.coffee.mug} />
-          </div>
-          <div className="hero__text">
-            <p className="eyebrow">{w.eyebrow}</p>
-            <h1 id="hero-h">{t.hero.title}</h1>
-            <p className="hero__lead">{t.hero.lead}</p>
-            <div className="btn-row">
-              <a className="btn btn--amber" href={mail}>
-                {t.hero.ctaEmail}
-              </a>
-              <a className="btn btn--ghost" href="#agentoffice">
-                {t.hero.ctaWork}
-              </a>
-            </div>
-            <p className="hero__proof">{t.hero.proof}</p>
           </div>
         </section>
 
@@ -147,6 +173,7 @@ export function SitePage({ t }: { t: Dict }) {
                 <canvas width={256} height={96} role="img" aria-label={w.alt.office} />
                 <a className="screen" data-anchor-box="screen" href={ao.link.href} target="_blank" rel="noopener noreferrer" aria-label={w.screenLabel}>
                   <img src="/img/ao-office-full.webp" alt="" width={1600} height={900} loading="lazy" />
+                  <span className="screen__tag" aria-hidden="true">{w.screenTag} ↗</span>
                 </a>
                 {w.agents.map((lines, i) => (
                   <span
@@ -417,7 +444,7 @@ export function SitePage({ t }: { t: Dict }) {
                 <a className="door" data-anchor-box="door-2" href={t.contact.github} target="_blank" rel="noopener noreferrer">
                   <span>{w.doors.github}</span>
                 </a>
-                <button className="talk" type="button" data-anchor-box="gabriel" data-lines={JSON.stringify(w.gabriel.lines)} aria-label={w.gabriel.label} hidden />
+                <button className="talk" type="button" data-anchor-box="gabriel" data-lines={JSON.stringify(w.gabriel.lines)} data-hint={w.talkHint} aria-label={w.gabriel.label} hidden />
                 <span className="bubble bubble--talk" data-anchor="gabriel-say" aria-live="polite" />
                 <Mug id={10} anchor="mug-plant" label={w.coffee.mug} />
               </div>
@@ -463,22 +490,6 @@ export function SitePage({ t }: { t: Dict }) {
         </div>
       </footer>
 
-      <div className="hud" hidden>
-        <span className="hud__floor" aria-hidden="true">
-          {floor("street")}
-        </span>
-        <button className="hud__coffee" type="button" aria-label={w.coffee.counter} aria-expanded="false">
-          <Cup />
-          <b>0</b>/10
-        </button>
-        <p className="hud__tip" hidden>
-          {w.coffee.hint}
-        </p>
-        <p className="hud__done" hidden>
-          {w.coffee.done} <a href={mail}>{w.coffee.doneCta}</a>
-        </p>
-        <span className="sr-only" aria-live="polite" data-coffee-live data-found={w.coffee.found} />
-      </div>
     </>
   );
 }

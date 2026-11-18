@@ -22,6 +22,7 @@ export const en = {
   },
   hero: {
     title: "Full stack engineer for SaaS and AI products",
+    stack: "4+ years in production · TypeScript, React, Node.js, PostgreSQL",
     lead: "I founded and built CRN, a retail ERP used by paying merchants that handles ~BRL 2M (~US$380K) in sales and 4,000 to 8,000 tax invoices a month, and AgentOffice, a real-time AI agent platform.",
     ctaEmail: "Email me",
     ctaWork: "See AgentOffice",
@@ -176,6 +177,10 @@ export const en = {
       ["Searching Drive", "Mapping 20 accounts"],
       ["Needs you", "Draft ready"],
     ],
+    floorsMenu: "Floors",
+    emailShort: "Email",
+    screenTag: "Real screenshot · useagentoffice.com",
+    talkHint: "Click me",
     approved: "Approved",
     screenLabel: "Open useagentoffice.com, the real AgentOffice office",
     nfe: "NF-e",
