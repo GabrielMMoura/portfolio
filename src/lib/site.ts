@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import type { Dict } from "@/content/en";
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://gabrielmmoura-portfolio.vercel.app";
+// No custom domain yet: on Vercel, fall back to the project's production URL.
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000");
 export const REPO_URL = "https://github.com/GabrielMMoura/portfolio";
 
 export function buildMetadata(t: Dict, path: "/" | "/pt"): Metadata {
