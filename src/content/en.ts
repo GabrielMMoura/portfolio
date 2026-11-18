@@ -38,7 +38,7 @@ export const en = {
     ],
     ctaEmail: "Email me",
     shotAlt:
-      "AgentOffice's 2D office: pixel-art desks where AI agents work, with live status bubbles such as \"Lendo o Notion\" and \"Precisa de você\".",
+      "AgentOffice's 2D office: pixel-art desks where AI agents work, with status bubbles such as “Lendo o Notion” and “Precisa de você”.",
     shotNote: "AgentOffice, real product screen",
   },
   agentoffice: {
@@ -67,13 +67,15 @@ export const en = {
       edgeTask: "task",
       edgeState: "agent state",
       waiting: "waiting for approval",
+      pause: "Pause animation",
+      play: "Play animation",
     },
     rulesTitle: "Product rules the system enforces",
     rules: [
       "Publishing, and any change to the shared Company Brain, waits for a human decision.",
       "Every task and every day has a credit ceiling.",
       "Connection credentials are encrypted with AES-256-GCM; data is separated by workspace.",
-      "Uploads (PDF, DOCX, XLSX, CSV, TXT, PNG, JPG up to 10 MB) are checked by their real content.",
+      "Uploads (PDF, DOCX, XLSX, CSV, TXT, PNG, JPG up to 10 MB) are checked by their real content.",
       "The audit history records actions without exposing passwords or keys.",
     ],
     notYetTitle: "Not built yet, as the product site states",

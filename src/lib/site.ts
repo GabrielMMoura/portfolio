@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { Dict } from "@/content/en";
 
 // No custom domain yet: on Vercel, fall back to the project's production URL.
@@ -28,3 +28,5 @@ export function buildMetadata(t: Dict, path: "/" | "/pt"): Metadata {
     },
   };
 }
+
+export const viewport: Viewport = { themeColor: "#dfdedb", colorScheme: "light" };

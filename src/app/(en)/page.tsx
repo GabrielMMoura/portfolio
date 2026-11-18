@@ -1,7 +1,8 @@
 import { en } from "@/content/en";
-import { buildMetadata } from "@/lib/site";
+import { buildMetadata, viewport as siteViewport } from "@/lib/site";
 import { SitePage } from "@/components/site/SitePage";
 
+export const viewport = siteViewport;
 export const metadata = buildMetadata(en, "/");
 
 export default function Home() {

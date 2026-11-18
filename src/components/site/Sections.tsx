@@ -3,6 +3,7 @@ import { REPO_URL } from "@/lib/site";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArchitectureDiagram } from "./ArchitectureDiagram";
+import { MotionToggle } from "./MotionToggle";
 import { Container, ExternalLink, FactRows, Rich, SectionMeta } from "./primitives";
 
 export function AgentOfficeSection({ t }: { t: Dict }) {
@@ -30,9 +31,10 @@ export function AgentOfficeSection({ t }: { t: Dict }) {
           </div>
         </div>
 
-        <div className="mt-16 rounded-md border border-ink/20 bg-paper/60 p-4 sm:p-6 lg:p-8">
-          <div className="mb-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+        <div data-diagram-box className="mt-16 rounded-md border border-ink/20 bg-paper/60 p-4 sm:p-6 lg:p-8">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
             <h3 className="text-[24px]">{s.diagramTitle}</h3>
+            <MotionToggle pauseLabel={s.diagram.pause} playLabel={s.diagram.play} />
           </div>
           <ArchitectureDiagram d={s.diagram} />
         </div>

@@ -79,7 +79,7 @@ export function Rich({ text }: { text: string }) {
     <>
       {parts.map((p, i) =>
         p.startsWith("`") ? (
-          <code key={i} className="rounded-sm bg-ink/[0.07] px-1 py-px font-mono text-[0.88em]">
+          <code key={i} translate="no" className="rounded-sm bg-ink/[0.07] px-1 py-px font-mono text-[0.88em]">
             {p.slice(1, -1)}
           </code>
         ) : (

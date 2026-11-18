@@ -78,6 +78,7 @@
     scroll-behavior: smooth;
     scroll-padding-top: 72px;
     -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
   }
   body {
     background: var(--bg);
@@ -218,8 +219,16 @@
     }
   }
 }
+.is-paused .flow,
+.is-paused .node-approval rect,
+.is-paused .approval-tag {
+  animation-play-state: paused !important;
+}
 @media (prefers-reduced-motion: reduce) {
   .approval-tag {
     opacity: 1;
+  }
+  .motion-toggle {
+    display: none !important;
   }
 }

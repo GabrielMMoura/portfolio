@@ -39,7 +39,7 @@ export const pt: Dict = {
     ],
     ctaEmail: "Mandar e-mail",
     shotAlt:
-      "Escritório 2D do AgentOffice: mesas em pixel art onde os agentes de IA trabalham, com balões de status ao vivo como \"Lendo o Notion\" e \"Precisa de você\".",
+      "Escritório 2D do AgentOffice: mesas em pixel art onde os agentes de IA trabalham, com balões de status como “Lendo o Notion” e “Precisa de você”.",
     shotNote: "AgentOffice, tela real do produto",
   },
   agentoffice: {
@@ -68,13 +68,15 @@ export const pt: Dict = {
       edgeTask: "tarefa",
       edgeState: "estado do agente",
       waiting: "aguardando aprovação",
+      pause: "Pausar animação",
+      play: "Retomar animação",
     },
     rulesTitle: "Regras do produto que o sistema garante",
     rules: [
       "Publicações e qualquer mudança no Company Brain compartilhado esperam a decisão de uma pessoa.",
       "Cada tarefa e cada dia têm um teto de créditos.",
       "Credenciais de conexão são criptografadas com AES-256-GCM; os dados ficam separados por workspace.",
-      "Arquivos enviados (PDF, DOCX, XLSX, CSV, TXT, PNG, JPG de até 10 MB) são conferidos pelo conteúdo real.",
+      "Arquivos enviados (PDF, DOCX, XLSX, CSV, TXT, PNG, JPG de até 10 MB) são conferidos pelo conteúdo real.",
       "O histórico de auditoria registra as ações sem expor senhas ou chaves.",
     ],
     notYetTitle: "Ainda não faz, como o site do produto informa",
